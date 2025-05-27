@@ -1,11 +1,12 @@
-
 export default async function handler(req, res) {
   try {
-    const response = await fetch('https://sochain.com/api/v2/get_address_balance/DOGE/DK8n5G1Xyo5PSRowdUFSR3JoqyqqiRPWE3');
+    const wallet = 'DK8n5G1Xyo5PSRowdUFSR3JoqyqqiRPWE3';
+    const response = await fetch(`https://dogechain.info/api/v1/address/balance/${wallet}`);
     const data = await response.json();
-    const doge = parseFloat(data.data.confirmed_balance);
+    if (!data.success) throw new Error('DOGE fetch failed');
+    const doge = parseFloat(data.balance);
     res.status(200).json({ doge });
-  } catch (error) {
+  } catch (err) {
     res.status(500).json({ error: 'DOGE fetch failed' });
   }
 }
